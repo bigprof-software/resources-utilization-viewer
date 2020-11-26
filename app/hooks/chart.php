@@ -1,76 +1,80 @@
 <?php
+	define('PREPEND_PATH', '../');
+	$appDir = dirname(__DIR__);
+	include("$appDir/lib.php");
+	
 	// config
-	$chart = array(
-		'dayWidth' => 3,
+	// TODO: these should be set in js or css rather than server-side to accomodate screen size
+	$chart = [
+		'dayWidth' => 2.5,
 		'resourceHeight' => 40,
 		'left' => 300,
 		'top' => 150,
 		'resourceSeparator' => 2,
-		'colors' => array(
+		'colors' => [
 			'#FFC57F', '#B9FF7F', '#7FFFC5', '#7FB9FF', '#C47FFF', '#FF7FB9', '#D8984B', '#8BD84B', '#4BD898', '#4B8BD8', '#984BD8', '#D84B8B', '#D8B68C', '#AFD88C', '#8CD8B6', '#8CAFD8', '#B68CD8', '#D88CAF'
-		)
-	);
+		],
+	];
 
-	$currDir=dirname(__FILE__);
-	include("$currDir/defaultLang.php");
-	include("$currDir/language.php");
-	include("$currDir/lib.php");
-	
-	include_once("$currDir/header.php");
-	
-	$t1=microtime(true);
+	$t1 = microtime(true);
 	
 	// some initilization
-	$resourceProject = $project = $projectColor = $resource = $unavailableResource = $assignment = array();
+	$resourceProject = $project = $projectColor = $resource = $unavailableResource = $assignment = [];
 
 	// chart parameters
-	$year=intval($_GET['year']);
-	if(!$year)	$year=date('Y');
-	$startDate="$year-01-01";
-	$endDate="$year-12-31";
+	$year = intval($_GET['year']);
+	if(!$year) $year = date('Y');
+
+	$startDate = "$year-01-01";
+	$endDate = "$year-12-31";
 	
 	// get projects
-	$res=sql("select Id, Name from projects", $eo);
-	$i=0;
-	while($row = db_fetch_row($res)){
+	$eo = ['silentErrors' => true];
+	$res = sql("SELECT `Id`, `Name` FROM `projects`", $eo);
+	$i = 0;
+	while($row = db_fetch_row($res)) {
 		$project[$row[0]] = $row[1];
 		$projectColor[$row[0]] = $chart['colors'][$i++];
 	}
 	
 	// get resources
-	$res=sql("select Id, Name, Available from resources", $eo);
-	while($row = db_fetch_row($res)){
+	$res = sql("SELECT `Id`, `Name`, `Available` FROM `resources`", $eo);
+	while($row = db_fetch_row($res)) {
 		$resource[$row[0]] = $row[1];
-		if(!$row[2])	$unavailableResource[$row[0]] = $row[1];
+		if(!$row[2]) $unavailableResource[$row[0]] = $row[1];
 	}
 	
 	// get assignments for open projects for selected year
-	$assignment = array();
-	$res=sql("select * from assignments where StartDate<='$endDate' and EndDate>='$startDate'", $eo);
-	while($row = db_fetch_assoc($res)){
-		$assignment[] = array(
+	$assignment = [];
+	$res = sql("SELECT * FROM `assignments` WHERE `StartDate` <= '$endDate' AND `EndDate` >= '$startDate'", $eo);
+	while($row = db_fetch_assoc($res)) {
+		$ResourceId = $row['ResourceId'];
+		$ProjectId = $row['ProjectId'];
+
+		$assignment[] = [
 			'Id' => $row['Id'],
-			'ProjectId' => $row['ProjectId'],
-			'ResourceId' => $row['ResourceId'],
+			'ProjectId' => $ProjectId,
+			'ResourceId' => $ResourceId,
 			'StartTS' => strtotime($row['StartDate']),
 			'EndTS' => strtotime($row['EndDate']),
-			'Commitment' => $row['Commitment']
-		);
+			'Commitment' => $row['Commitment'],
+		];
 		
-		if(!isset($resourceProject[$row['ResourceId']])){
-			$resourceProject[$row['ResourceId']][$row['ProjectId']] = 0;
-		}else{
-			$resourceProject[$row['ResourceId']][$row['ProjectId']] = count($resourceProject[$row['ResourceId']]);
-		}
+		if(!isset($resourceProject[$ResourceId]))
+			$resourceProject[$ResourceId][$ProjectId] = 0;
+		else
+			$resourceProject[$ResourceId][$ProjectId] = count($resourceProject[$ResourceId]);
 	}
 	
-	$t2=microtime(true);
+	$t2 = microtime(true);
 	
 	
 	
 	/*******************************************************
-				View code begins below
+		View code begins below
+		TODO: the code below is in need of serious refactoring
 	*******************************************************/
+	include_once("$appDir/header.php");
 	
 	// Years navigator
 	$prevYear = $year - 1;
@@ -91,7 +95,7 @@
 	$prevLeft = $chart['left'];
 	$thisMonth = date('n');
 	$thisYear = date('Y');
-	for($m=1; $m<=12; $m++){
+	for($m = 1; $m <= 12; $m++) {
 		$daysPerMonth = date('t', strtotime("$year-$m-01"));
 		?>
 		<div
@@ -100,7 +104,7 @@
 				left: <?php echo $prevLeft; ?>px;
 				height: <?php echo ((count($resource) + 1) * ($chart['resourceHeight'] + $chart['resourceSeparator'])); ?>px;
 				border-left: dotted 1px Silver;
-				<?php if($m==12){ ?>border-right: dotted 1px Silver;<?php } ?>
+				<?php if($m == 12) { ?>border-right: dotted 1px Silver;<?php } ?>
 				top: <?php echo ($chart['top'] + $chart['resourceHeight'] + $chart['resourceSeparator']); ?>px;
 				text-align: center;
 				font-family: Arial; font-size: 10px; font-weight: bold;
@@ -111,7 +115,7 @@
 		<?php
 		
 		// today line
-		if($year==$thisYear && $m==$thisMonth){
+		if($year == $thisYear && $m == $thisMonth) {
 			?>
 			<div
 				title="Today, <?php echo date('j/n/Y'); ?>"
@@ -131,8 +135,8 @@
 	
 	
 	// Display resource names
-	foreach($resource as $ResourceId => $ResourceName){
-		$available = (array_key_exists($ResourceId, $unavailableResource) ? false : true);
+	foreach($resource as $ResourceId => $ResourceName) {
+		$available = !array_key_exists($ResourceId, $unavailableResource);
 		?><div
 			style="
 				position: absolute;
@@ -144,7 +148,7 @@
 				font-size: 12px;
 			">
 				<a
-					href="resources_view.php?SelectedID=<?php echo $ResourceId; ?>"
+					href="../resources_view.php?SelectedID=<?php echo $ResourceId; ?>"
 					style="
 						text-decoration: <?php echo ($available ? 'none' : 'line-through'); ?>;
 						color: <?php echo ($available ? 'DarkBlue' : 'Silver'); ?>;
@@ -194,9 +198,9 @@
 				overflow:hidden;
 			"
 			title="<?php echo htmlspecialchars($project[$assDetails['ProjectId']].': '.$resource[$assDetails['ResourceId']]); ?>. <?php echo ($assDetails['Commitment'] * 100); ?>% commitment from <?php echo date('j/n/Y', $assDetails['StartTS']); ?> to <?php echo date('j/n/Y', $assDetails['EndTS']); ?>"
-			onclick="window.location='assignments_view.php?SelectedID=<?php echo $assDetails['Id']; ?>';">
+			onclick="window.location='../assignments_view.php?SelectedID=<?php echo $assDetails['Id']; ?>';">
 				<?php echo $project[$assDetails['ProjectId']]; ?>
 		</div><?php
 	}
 
-	include_once("$currDir/footer.php");
+	include_once("$appDir/footer.php");

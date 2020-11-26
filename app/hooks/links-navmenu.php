@@ -11,7 +11,7 @@
 	*/
 
 		$navLinks[] = array(
-			'url' => 'chart.php', 
+			'url' => 'hooks/chart.php', 
 			'title' => 'Resources Utilization Chart', 
 			'groups' => array('*'), // groups allowed to see this link, use '*' if you want to show the link to all groups
 			'icon' => 'images/chart_bar.png'
