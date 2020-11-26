@@ -1,12 +1,16 @@
+<?php
+	$rdata = array_map('to_utf8', array_map('nl2br', array_map('html_attr_tags_ok', $rdata)));
+	$jdata = array_map('to_utf8', array_map('nl2br', array_map('html_attr_tags_ok', $jdata)));
+?>
 <script>
-	$j(function(){
+	$j(function() {
 		var tn = 'assignments';
 
 		/* data for selected record, or defaults if none is selected */
 		var data = {
-			ProjectId: { id: '<?php echo $rdata['ProjectId']; ?>', value: '<?php echo $rdata['ProjectId']; ?>', text: '<?php echo $jdata['ProjectId']; ?>' },
-			ProjectDuration: '<?php echo $jdata['ProjectDuration']; ?>',
-			ResourceId: { id: '<?php echo $rdata['ResourceId']; ?>', value: '<?php echo $rdata['ResourceId']; ?>', text: '<?php echo $jdata['ResourceId']; ?>' }
+			ProjectId: <?php echo json_encode(array('id' => $rdata['ProjectId'], 'value' => $rdata['ProjectId'], 'text' => $jdata['ProjectId'])); ?>,
+			ProjectDuration: <?php echo json_encode($jdata['ProjectDuration']); ?>,
+			ResourceId: <?php echo json_encode(array('id' => $rdata['ResourceId'], 'value' => $rdata['ResourceId'], 'text' => $jdata['ResourceId'])); ?>
 		};
 
 		/* initialize or continue using AppGini.cache for the current table */
@@ -15,7 +19,7 @@
 		var cache = AppGini.cache[tn];
 
 		/* saved value for ProjectId */
-		cache.addCheck(function(u, d){
+		cache.addCheck(function(u, d) {
 			if(u != 'ajax_combo.php') return false;
 			if(d.t == tn && d.f == 'ProjectId' && d.id == data.ProjectId.id)
 				return { results: [ data.ProjectId ], more: false, elapsed: 0.01 };
@@ -23,12 +27,12 @@
 		});
 
 		/* saved value for ProjectId autofills */
-		cache.addCheck(function(u, d){
+		cache.addCheck(function(u, d) {
 			if(u != tn + '_autofill.php') return false;
 
 			for(var rnd in d) if(rnd.match(/^rnd/)) break;
 
-			if(d.mfk == 'ProjectId' && d.id == data.ProjectId.id){
+			if(d.mfk == 'ProjectId' && d.id == data.ProjectId.id) {
 				$j('#ProjectDuration' + d[rnd]).html(data.ProjectDuration);
 				return true;
 			}
@@ -37,7 +41,7 @@
 		});
 
 		/* saved value for ResourceId */
-		cache.addCheck(function(u, d){
+		cache.addCheck(function(u, d) {
 			if(u != 'ajax_combo.php') return false;
 			if(d.t == tn && d.f == 'ResourceId' && d.id == data.ResourceId.id)
 				return { results: [ data.ResourceId ], more: false, elapsed: 0.01 };

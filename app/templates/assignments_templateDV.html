@@ -1,15 +1,12 @@
 <!-- Edit this file to change the layout of the detail view form -->
 
-<script src="resources/datepicker/js/datepicker.packed.js"></script>
-<link href="resources/datepicker/css/datepicker.css" rel="stylesheet">
-
 <a name="detail-view"></a>
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
 <div class="panel-body" id="assignments_dv_container">
 	<!-- child links -->
-	<div class="row">
-		<div class="col-xs-12">
+	<div class="row vspacer-md">
+		<div class="col-xs-12 children-links">
 			<div class="clearfix"></div>
 		</div>
 	</div>
@@ -19,35 +16,47 @@
 		<div class="col-md-8 col-lg-10" id="assignments_dv_form">
 			<fieldset class="form-horizontal">
 
-				<div class="form-group">
+				<!-- Field: ID -->
+				<div class="form-group assignments-Id">
+					<hr class="hidden-md hidden-lg">
 					<label for="Id" class="control-label col-lg-3">ID</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="Id"><%%VALUE(Id)%%></div>
 					</div>
 				</div>
 
-				<div class="form-group">
+				<!-- Field: Project -->
+				<div class="form-group assignments-ProjectId">
+					<hr class="hidden-md hidden-lg">
 					<label for="ProjectId" class="control-label col-lg-3" data-parent_link="view_parent_modal">Project</label>
 					<div class="col-lg-9">
-						<div class="row form-control-static"><div class="col-xs-11"><%%COMBO(ProjectId)%%><%%PLINK(ProjectId)%%><%%ADDNEW(projects)%%></div><div class="col-xs-1"><span id="ProjectIdLoading"></span></div></div>
+						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(ProjectId)%%><%%PLINK(ProjectId)%%><%%ADDNEW(projects)%%><span id="ProjectIdLoading"></span></div>
 					</div>
 				</div>
 
-				<div class="form-group">
+				<!-- Field: Project Duration -->
+				<div class="form-group assignments-ProjectDuration">
+					<hr class="hidden-md hidden-lg">
 					<label for="ProjectDuration" class="control-label col-lg-3">Project Duration</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="ProjectDuration"></div>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label for="ResourceId" class="control-label col-lg-3" data-parent_link="view_parent_modal">Resource</label>
+				<!-- Field: Resource -->
+				<div class="form-group assignments-ResourceId">
+					<hr class="hidden-md hidden-lg">
+					<label for="ResourceId" class="control-label col-lg-3" data-parent_link="view_parent_modal">Resource <i class="glyphicon glyphicon-info-sign text-info" data-toggle="collapse" data-target="#ResourceId-description"></i></label>
 					<div class="col-lg-9">
-						<div class="row form-control-static"><div class="col-xs-11"><%%COMBO(ResourceId)%%><%%PLINK(ResourceId)%%><%%ADDNEW(resources)%%></div></div>
+						<span class="help-block collapse" id="ResourceId-description"><div class="alert alert-info">Non-available resources are not listed in the drop-down.</div></span>
+
+						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(ResourceId)%%><%%PLINK(ResourceId)%%><%%ADDNEW(resources)%%></div>
 					</div>
 				</div>
 
-				<div class="form-group">
+				<!-- Field: Commitment -->
+				<div class="form-group assignments-Commitment">
+					<hr class="hidden-md hidden-lg">
 					<label for="Commitment" class="control-label col-lg-3">Commitment<span class="text-danger"><%%TRANSLATION(*)%%></span> <i class="glyphicon glyphicon-info-sign text-info" data-toggle="collapse" data-target="#Commitment-description"></i></label>
 					<div class="col-lg-9">
 						<span class="help-block collapse" id="Commitment-description"><div class="alert alert-info">1.00 means full time commitment, 0.50 means half-time, ... etc.</div></span>
@@ -56,14 +65,18 @@
 					</div>
 				</div>
 
-				<div class="form-group">
+				<!-- Field: Start Date -->
+				<div class="form-group assignments-StartDate">
+					<hr class="hidden-md hidden-lg">
 					<label for="StartDate" class="control-label col-lg-3">Start Date</label>
 					<div class="col-lg-9">
 						<%%COMBO(StartDate)%%>
 					</div>
 				</div>
 
-				<div class="form-group">
+				<!-- Field: End Date -->
+				<div class="form-group assignments-EndDate">
+					<hr class="hidden-md hidden-lg">
 					<label for="EndDate" class="control-label col-lg-3">End Date</label>
 					<div class="col-lg-9">
 						<%%COMBO(EndDate)%%>
@@ -74,6 +87,7 @@
 		</div>
 
 		<!-- DV action buttons -->
+		<hr class="hidden-md hidden-lg">
 		<div class="col-md-4 col-lg-2" id="assignments_dv_action_buttons">
 			<div class="btn-toolbar">
 				<div class="btn-group-vertical btn-group-lg" style="width: 100%;">
@@ -102,33 +116,46 @@
 			var autoclose_mode = ($j('input[name=AutoClose]').val() == 1);
 			var record_added_ok = (location.search.split('record-added-ok=').length == 2);
 			var record_updated_ok = (location.search.split('record-updated-ok=').length == 2);
-			if((record_added_ok || record_updated_ok) && embedded_mode && autoclose_mode){
-				setTimeout(function(){
-					window.parent.jQuery('.modal').modal('hide');
-				}, 2000);
+			if((record_added_ok || record_updated_ok) && embedded_mode && autoclose_mode) {
+				setTimeout(AppGini.closeParentModal, 2000);
 			}
 
-			$j('select, input[type=text], textarea').not(':disabled').eq(0).focus();
-			$j('form').eq(0).change(function(){
+			setTimeout(AppGini.focusFirstFormElement, 100);
+
+			$j('form').eq(0).change(function() {
 				if($j(this).data('already_changed')) return;
 				if($j('#deselect').length) $j('#deselect').removeClass('btn-default').addClass('btn-warning').get(0).lastChild.data = " <%%TRANSLATION(Cancel)%%>";
 				$j(this).data('already_changed', true);
 			});
 
-			$j('a[href="<%%TRANSLATION(ImageFolder)%%>"]').click(function(){ return false; });
+			$j('a[href="<%%TRANSLATION(ImageFolder)%%>"]').click(function() { /* */ return false; });
 
 
-			if(!embedded_mode){
+			if(!embedded_mode) {
 				/* add a horizontal spacer to [add new parent] buttons that don't have a spacered element before them */
 				$j('.add_new_parent').prev(':not(.hspacer-md)').next().addClass('hspacer-md');
 
-				$j('.add_new_parent').click(function(){
+				$j('.add_new_parent').click(function() {
 					var pt = $j(this).attr('id').replace(/_add_new$/, '');
 					modal_window({
 						url: pt + '_view.php?addNew_x=1&Embedded=1',
-						close: function(){
+						close: function() {
 							var field_id = $j('#' + pt + '_add_new').prevAll('input:hidden').eq(0).attr('id');
 							$j('#' + field_id + '-container').select2('focus').select2('focus');
+
+							/* if a new parent was added, select it */
+							var new_id = localStorage.getItem(pt + '_last_added_id');
+							if(new_id === null) return;
+
+							localStorage.clear(pt + '_last_added_id');
+							AppGini.lookupText({
+								id: new_id,
+								table: 'assignments',
+								field: field_id,
+								callback: function(data) {
+									$j('#' + field_id + '-container').select2('data', data, true);
+								}
+							});
 						},
 						size: 'full',
 						title: $j(this).attr('title')
@@ -136,33 +163,30 @@
 				});
 			}
 
-			/* find and hide parent links if field label has data 'parent_link' set to 'view_parent_hidden' */
-			$j('label[data-parent_link=view_parent_hidden]').each(function(){
-				$j(this).parents('.form-group').find('.view_parent').hide();
-			});
+			AppGini.hideViewParentLinks();
 
-			$j('form').on('click', '.view_parent', function(){
+			$j('form').on('click', '.view_parent', function() {
 				var pt = $j(this).attr('id').replace(/_view_parent$/, '');
-				if($j(this).prevAll('input:hidden').length){
+				if($j(this).prevAll('input:hidden').length) {
 					var parent_id = $j(this).prevAll('input:hidden').eq(0).val();
-				}else{
+				} else {
 					var parent_id = $j(this).prevAll().children('input:hidden').eq(0).val();
 				}
 
 				/* handle radio lookups */
-				if($j(this).prevAll('[type=radio]').length){
+				if($j(this).prevAll('[type=radio]').length) {
 					parent_id = $j(this).prevAll('[type=radio]').eq(0).val();
 				}
 
-				if(parent_id != '{empty_value}'){
+				if(parent_id != '{empty_value}' && parent_id != undefined && parent_id != '') {
 					var parent_link = $j(this).parents('.form-group').children('label').data('parent_link');
-					switch(parent_link){
+					switch(parent_link) {
 						case 'view_parent_hidden':
 							break;
 						case 'view_parent_modal':
 							modal_window({
 								url: pt + '_view.php?Embedded=1&SelectedID=' + encodeURIComponent(parent_id),
-								close: function(){
+								close: function() {
 									var field_id = $j('#' + pt + '_view_parent').prevAll('input:hidden').eq(0).attr('id');
 									$j('#' + field_id + '-container').select2('focus').select2('focus');
 								},
@@ -183,11 +207,11 @@
 
 
 			/* load admin tools for admin user */
-			if(!add_new_mode){
+			if(!add_new_mode) {
 				$j('body').append('<div id="admin-tools-appendix"></div>');
 				$j('#admin-tools-appendix').load(
 					'ajax_admin_tools.php?table=assignments&id=<%%URLVALUE(Id)%%>',
-					function(resp){
+					function(resp) {
 						if(!resp.length) return;
 						$j.ajax('ajax_admin_tools.php?action=get_admin_tools_js&table=assignments&id=<%%URLVALUE(Id)%%>');
 					}
@@ -195,8 +219,8 @@
 			}
 
 			/* warn user if 'add new' clicked while unsaved changes exist */
-			$j('#addNew').click(function(){
-				if($j('#deselect.btn-warning').length){
+			$j('#addNew').click(function() {
+				if($j('#deselect.btn-warning').length) {
 					return confirm('<%%TRANSLATION(discard changes confirm)%%>');
 				}
 			});
