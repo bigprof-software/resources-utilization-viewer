@@ -1,39 +1,31 @@
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/bigprof-software/online-rental-property-manager) 
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/bigprof-software/resources-utilization-viewer) 
 
-# Online Rental Property Manager (ORPM)
+# Resources Utilization Viewer (RUView)
 
-![ORPM screenshots](https://cdn.bigprof.com/screencasts/online-rental-property-manager-demo-6.3.gif)
+![RUView screenshots](https://cdn.bigprof.com/appgini-open-source-apps/ruview/screencast.gif)
 
-Online rental property manager (ORPM) is a free open source app.
-It allows you to manage landlords, rental properties, units, 
-applications, leases and tenants. Add all details related to the tenants, i.e. references, 
-rental history, employment history and income overview.
+RUView (pronounced like _love you_ with an _r_ in place of _l_) is short for _Resources Utilization Viewer_. 
 
-ORPM was created using [AppGini](https://bigprof.com/appgini/).
+If your business is project-based, you typically have a team working with many projects.
+Each project has a start and an end date, and each team member might be 
+working on a project for a specific period then moving to another project, 
+or even be working on multiple projects at the same time, dividing his/her 
+time between them. It can get really tricky trying to figure out the schedule 
+and availability of each team member.
+
+RUView is a free open source app that helps you visualize all the resource
+utilization data in one simple chart so you can instantly see who's working
+on what project/task and when. This allows you to quickly plan resources usage and availability.
+
+RUView was created using [AppGini](https://bigprof.com/appgini/).
 So you can easily customize it to add/remove 
 details or any extra functionality to fit your own requirements. 
-ORPM is a responsive, multi-user web-based application that you can access from your PC, tablet, 
+RUView is a responsive, multi-user web-based application that you can access from your PC, tablet, 
 mobile or any other device. 
 
-#### [⇩ Download the latest release](https://github.com/bigprof-software/online-rental-property-manager/releases/latest) ([_Changelog_](https://github.com/bigprof-software/online-rental-property-manager/releases))
+#### [⇩ Download the latest release](https://github.com/bigprof-software/resources-utilization-viewer/releases/latest) ([_Changelog_](https://github.com/bigprof-software/resources-utilization-viewer/releases))
 
 ## Features
-
-* Manage applicants and tenants.
-* Add, search and manage applications and leases.
-* Manage applicants/tenants rental history, employment history and other references.
-* Manage landlords, properties, and units.
-* Reports (created by [Summary Reports plugin for AppGini](https://bigprof.com/appgini/applications/summary-reports-plugin)):
-	* **Applicants by status** review how many new applicants vs. tenants vs. previous tenants do we have.
-	* **Applications/leases over time** review the growth of leases and applications over time.
-	* **Applications/leases by property** review the growth of demand for each property over time.
-	* **Leases by property over time** review the growth of actual leases for each property over time.
-	* **Lease value by property over time** check the monthly rental revenue for each property and its growth over time.
-* Efficient management of applications status through mass update of multiple applications.
-* Quickly view leases starting and ending each month through a calendar view -- also allows adding and editing (created by [Calendar plugin for AppGini](https://bigprof.com/appgini/applications/calendar-plugin)).
-
-This application was created using [AppGini](https://bigprof.com/appgini/),
-and therefore it shares the features of any AppGini application as well, including:
 
 * Responsive Bootstrap apps that work beautifully on any device.
 * Support for multiple users and user groups, with easy-to-configure per-table permissions.
@@ -58,7 +50,7 @@ This application is ready to run within the Gitpod IDE.
 This will allow you to try the application out and develop it for your needs.
 All you will need is a web browser. _Do not use this in production!!!_
 
-**[Launch private demo on Gitpod](https://gitpod.io/#https://github.com/bigprof-software/online-rental-property-manager)**
+**[Launch private demo on Gitpod](https://gitpod.io/#https://github.com/bigprof-software/resources-utilization-viewer)**
 
 The app would take a couple of minutes to launch.
 Afterwards, you'll see the welcome screen of the app in the right part of the window, where you can start the setup wizard.
@@ -84,7 +76,7 @@ If you don't have the above software installed, we recommend installing
 
 #### Installation steps
 
-1. [Download the latest release as a zip file](https://github.com/bigprof-software/online-rental-property-manager/releases/latest).
+1. [Download the latest release as a zip file](https://github.com/bigprof-software/resources-utilization-viewer/releases/latest).
 (Click the *Source code (zip)* link down the page).
 
 2. Extract the contents of the zip file. Then copy the contents of the `app` folder into a folder inside your document root.
@@ -118,7 +110,7 @@ If your server has cPanel installed, here is a
 
 #### Installation steps
 
-1. [Download the latest release as a zip file](https://github.com/bigprof-software/online-rental-property-manager/releases/latest).
+1. [Download the latest release as a zip file](https://github.com/bigprof-software/resources-utilization-viewer/releases/latest).
 (Click the *Source code (zip)* link down the page).
 
 2. Extract the contents of the zip file. Then upload the contents of the `app` folder to a folder inside your server document root.
