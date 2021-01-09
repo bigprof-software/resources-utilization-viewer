@@ -23,7 +23,7 @@ details or any extra functionality to fit your own requirements.
 RUView is a responsive, multi-user web-based application that you can access from your PC, tablet, 
 mobile or any other device. 
 
-#### [⇩ Download the latest release](https://github.com/bigprof-software/resources-utilization-viewer/releases/latest) ([_Changelog_](https://github.com/bigprof-software/resources-utilization-viewer/releases)) | [![Buy Me A Coffee!](https://cdn.buymeacoffee.com/buttons/v2/default-blue.png)](https://www.buymeacoffee.com/genedy) 
+#### [⇩ Download the latest release](https://github.com/bigprof-software/resources-utilization-viewer/releases/latest) ([_Changelog_](https://github.com/bigprof-software/resources-utilization-viewer/releases)) | [![Buy Me A Coffee!](https://cdn.bigprof.com/appgini-open-source-apps/buy-me-a-coffee.png)](https://www.buymeacoffee.com/genedy) 
 
 ## Features
 
