@@ -1,9 +1,10 @@
-<!-- Edit this file to change the layout of the detail view form -->
+<!-- To change the layout of the detail view form, we recommend using JS code in hooks/resources-dv.js rather than editing this file -->
 
-<a name="detail-view"></a>
+<div id="detail-view"></div>
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
-<div class="panel-body" id="resources_dv_container">
+<div id="resources_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
+<div class="panel-body hidden" id="resources_dv_container">
 	<!-- child links -->
 	<div class="row vspacer-md">
 		<div class="col-xs-12 children-links">
@@ -23,7 +24,7 @@
 				<!-- Field: ID -->
 				<div class="form-group resources-Id">
 					<hr class="hidden-md hidden-lg">
-					<label for="Id" class="control-label col-lg-3">ID</label>
+					<label class="control-label col-lg-3" for="Id">ID</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="Id"><%%VALUE(Id)%%></div>
 					</div>
@@ -32,7 +33,7 @@
 				<!-- Field: Name -->
 				<div class="form-group resources-Name">
 					<hr class="hidden-md hidden-lg">
-					<label for="Name" class="control-label col-lg-3">Name</label>
+					<label class="control-label col-lg-3" for="Name">Name</label>
 					<div class="col-lg-9">
 						<input maxlength="40" type="text" class="form-control" name="Name" id="Name" value="<%%VALUE(Name)%%>">
 					</div>
@@ -42,7 +43,8 @@
 				<div class="form-group resources-Available">
 					<hr class="hidden-md hidden-lg">
 					<div class="col-lg-offset-3 col-lg-9">
-						<div class="checkbox"><label for="Available"><input type="checkbox" name="Available" id="Available" value="1" <%%CHECKED(Available)%%>> Available</label>
+						<div class="checkbox">
+							<label for="Available"><input type="checkbox" name="Available" id="Available" value="1" <%%CHECKED(Available)%%>> Available</label>
 						</div>
 					</div>
 				</div>
@@ -94,7 +96,12 @@
 				setTimeout(AppGini.closeParentModal, 2000);
 			}
 
-			setTimeout(AppGini.focusFirstFormElement, 100);
+
+			setTimeout(function() {
+				$j('#resources_dv_container-loading').addClass('hidden');
+				$j('#resources_dv_container').removeClass('hidden');
+				AppGini.focusFormElement('resources', 'Name');
+			}, 1100);
 
 			$j('form').eq(0).change(function() {
 				if($j(this).data('already_changed')) return;
@@ -102,7 +109,7 @@
 				$j(this).data('already_changed', true);
 			});
 
-			$j('a[href="<%%TRANSLATION(ImageFolder)%%>"]').click(function() { /* */ return false; });
+			$j('a[href="<%%BASE_UPLOAD_PATH%%>"]').click(function() { return false; });
 
 			if(embedded_mode) {
 				/* hide links to children tables in embedded mode */

@@ -1,9 +1,10 @@
-<!-- Edit this file to change the layout of the detail view form -->
+<!-- To change the layout of the detail view form, we recommend using JS code in hooks/assignments-dv.js rather than editing this file -->
 
-<a name="detail-view"></a>
+<div id="detail-view"></div>
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
-<div class="panel-body" id="assignments_dv_container">
+<div id="assignments_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
+<div class="panel-body hidden" id="assignments_dv_container">
 	<!-- child links -->
 	<div class="row vspacer-md">
 		<div class="col-xs-12 children-links">
@@ -19,7 +20,7 @@
 				<!-- Field: ID -->
 				<div class="form-group assignments-Id">
 					<hr class="hidden-md hidden-lg">
-					<label for="Id" class="control-label col-lg-3">ID</label>
+					<label class="control-label col-lg-3" for="Id">ID</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="Id"><%%VALUE(Id)%%></div>
 					</div>
@@ -28,7 +29,7 @@
 				<!-- Field: Project -->
 				<div class="form-group assignments-ProjectId">
 					<hr class="hidden-md hidden-lg">
-					<label for="ProjectId" class="control-label col-lg-3" data-parent_link="view_parent_modal">Project</label>
+					<label class="control-label col-lg-3" for="ProjectId" data-parent_link="view_parent_modal">Project</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(ProjectId)%%><%%PLINK(ProjectId)%%><%%ADDNEW(projects)%%><span id="ProjectIdLoading"></span></div>
 					</div>
@@ -37,7 +38,7 @@
 				<!-- Field: Project Duration -->
 				<div class="form-group assignments-ProjectDuration">
 					<hr class="hidden-md hidden-lg">
-					<label for="ProjectDuration" class="control-label col-lg-3">Project Duration</label>
+					<label class="control-label col-lg-3">Project Duration</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="ProjectDuration"></div>
 					</div>
@@ -46,10 +47,9 @@
 				<!-- Field: Resource -->
 				<div class="form-group assignments-ResourceId">
 					<hr class="hidden-md hidden-lg">
-					<label for="ResourceId" class="control-label col-lg-3" data-parent_link="view_parent_modal">Resource <i class="glyphicon glyphicon-info-sign text-info" data-toggle="collapse" data-target="#ResourceId-description"></i></label>
+					<label class="control-label col-lg-3" for="ResourceId" data-parent_link="view_parent_modal">Resource <i class="glyphicon glyphicon-info-sign text-info" data-toggle="collapse" data-target="#ResourceId-description"></i></label>
 					<div class="col-lg-9">
-						<span class="help-block collapse" id="ResourceId-description"><div class="alert alert-info">Non-available resources are not listed in the drop-down.</div></span>
-
+						<span class="help-block bspacer-xs collapse" id="ResourceId-description"><div class="alert alert-info bspacer-xs">Non-available resources are not listed in the drop-down.</div></span>
 						<div class="form-control-static" style="white-space: nowrap; overflow-x: hidden;"><%%COMBO(ResourceId)%%><%%PLINK(ResourceId)%%><%%ADDNEW(resources)%%></div>
 					</div>
 				</div>
@@ -57,10 +57,9 @@
 				<!-- Field: Commitment -->
 				<div class="form-group assignments-Commitment">
 					<hr class="hidden-md hidden-lg">
-					<label for="Commitment" class="control-label col-lg-3">Commitment<span class="text-danger"><%%TRANSLATION(*)%%></span> <i class="glyphicon glyphicon-info-sign text-info" data-toggle="collapse" data-target="#Commitment-description"></i></label>
+					<label class="control-label col-lg-3" for="Commitment">Commitment<span class="text-danger"><%%TRANSLATION(*)%%></span> <i class="glyphicon glyphicon-info-sign text-info" data-toggle="collapse" data-target="#Commitment-description"></i></label>
 					<div class="col-lg-9">
-						<span class="help-block collapse" id="Commitment-description"><div class="alert alert-info">1.00 means full time commitment, 0.50 means half-time, ... etc.</div></span>
-
+						<span class="help-block bspacer-xs collapse" id="Commitment-description"><div class="alert alert-info bspacer-xs">1.00 means full time commitment, 0.50 means half-time, ... etc.</div></span>
 						<%%COMBO(Commitment)%%>
 					</div>
 				</div>
@@ -68,7 +67,7 @@
 				<!-- Field: Start Date -->
 				<div class="form-group assignments-StartDate">
 					<hr class="hidden-md hidden-lg">
-					<label for="StartDate" class="control-label col-lg-3">Start Date</label>
+					<label class="control-label col-lg-3" for="StartDate-dd">Start Date</label>
 					<div class="col-lg-9">
 						<%%COMBO(StartDate)%%>
 					</div>
@@ -77,7 +76,7 @@
 				<!-- Field: End Date -->
 				<div class="form-group assignments-EndDate">
 					<hr class="hidden-md hidden-lg">
-					<label for="EndDate" class="control-label col-lg-3">End Date</label>
+					<label class="control-label col-lg-3" for="EndDate-dd">End Date</label>
 					<div class="col-lg-9">
 						<%%COMBO(EndDate)%%>
 					</div>
@@ -120,7 +119,12 @@
 				setTimeout(AppGini.closeParentModal, 2000);
 			}
 
-			setTimeout(AppGini.focusFirstFormElement, 100);
+
+			setTimeout(function() {
+				$j('#assignments_dv_container-loading').addClass('hidden');
+				$j('#assignments_dv_container').removeClass('hidden');
+				AppGini.focusFormElement('assignments', 'ProjectId');
+			}, 1100);
 
 			$j('form').eq(0).change(function() {
 				if($j(this).data('already_changed')) return;
@@ -128,7 +132,7 @@
 				$j(this).data('already_changed', true);
 			});
 
-			$j('a[href="<%%TRANSLATION(ImageFolder)%%>"]').click(function() { /* */ return false; });
+			$j('a[href="<%%BASE_UPLOAD_PATH%%>"]').click(function() { return false; });
 
 
 			if(!embedded_mode) {

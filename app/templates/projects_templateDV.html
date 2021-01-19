@@ -1,9 +1,10 @@
-<!-- Edit this file to change the layout of the detail view form -->
+<!-- To change the layout of the detail view form, we recommend using JS code in hooks/projects-dv.js rather than editing this file -->
 
-<a name="detail-view"></a>
+<div id="detail-view"></div>
 <div class="panel-heading"><h3 class="panel-title"><strong><%%DETAIL_VIEW_TITLE%%></strong></h3></div>
 
-<div class="panel-body" id="projects_dv_container">
+<div id="projects_dv_container-loading" class="text-center text-info text-bold vspacer-lg"><i class="glyphicon glyphicon-refresh loop-rotate"></i> <%%TRANSLATION(Loading ...)%%></div>
+<div class="panel-body hidden" id="projects_dv_container">
 	<!-- child links -->
 	<div class="row vspacer-md">
 		<div class="col-xs-12 children-links">
@@ -23,7 +24,7 @@
 				<!-- Field: ID -->
 				<div class="form-group projects-Id">
 					<hr class="hidden-md hidden-lg">
-					<label for="Id" class="control-label col-lg-3">ID</label>
+					<label class="control-label col-lg-3" for="Id">ID</label>
 					<div class="col-lg-9">
 						<div class="form-control-static" id="Id"><%%VALUE(Id)%%></div>
 					</div>
@@ -32,7 +33,7 @@
 				<!-- Field: Name -->
 				<div class="form-group projects-Name">
 					<hr class="hidden-md hidden-lg">
-					<label for="Name" class="control-label col-lg-3">Name</label>
+					<label class="control-label col-lg-3" for="Name">Name</label>
 					<div class="col-lg-9">
 						<input maxlength="40" type="text" class="form-control" name="Name" id="Name" value="<%%VALUE(Name)%%>">
 					</div>
@@ -41,7 +42,7 @@
 				<!-- Field: Start Date -->
 				<div class="form-group projects-StartDate">
 					<hr class="hidden-md hidden-lg">
-					<label for="StartDate" class="control-label col-lg-3">Start Date</label>
+					<label class="control-label col-lg-3" for="StartDate-dd">Start Date</label>
 					<div class="col-lg-9">
 						<%%COMBO(StartDate)%%>
 					</div>
@@ -50,7 +51,7 @@
 				<!-- Field: End Date -->
 				<div class="form-group projects-EndDate">
 					<hr class="hidden-md hidden-lg">
-					<label for="EndDate" class="control-label col-lg-3">End Date</label>
+					<label class="control-label col-lg-3" for="EndDate-dd">End Date</label>
 					<div class="col-lg-9">
 						<%%COMBO(EndDate)%%>
 					</div>
@@ -103,7 +104,12 @@
 				setTimeout(AppGini.closeParentModal, 2000);
 			}
 
-			setTimeout(AppGini.focusFirstFormElement, 100);
+
+			setTimeout(function() {
+				$j('#projects_dv_container-loading').addClass('hidden');
+				$j('#projects_dv_container').removeClass('hidden');
+				AppGini.focusFormElement('projects', 'Name');
+			}, 1100);
 
 			$j('form').eq(0).change(function() {
 				if($j(this).data('already_changed')) return;
@@ -111,7 +117,7 @@
 				$j(this).data('already_changed', true);
 			});
 
-			$j('a[href="<%%TRANSLATION(ImageFolder)%%>"]').click(function() { /* */ return false; });
+			$j('a[href="<%%BASE_UPLOAD_PATH%%>"]').click(function() { return false; });
 
 			if(embedded_mode) {
 				/* hide links to children tables in embedded mode */
