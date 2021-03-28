@@ -1,6 +1,6 @@
 <?php
-	$appgini_version = '5.93.1128';
-	$generated_ts = '19/1/2021 9:11:17 PM';
+	$appgini_version = '5.95.1136';
+	$generated_ts = '28/3/2021 6:51:14 PM';
 
 	$currDir = dirname(__FILE__);
 	require("{$currDir}/incCommon.php");
