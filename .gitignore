@@ -6,6 +6,7 @@ app/rand
 app/images/*
 !app/images/index.html
 !app/images/blank*
+!app/images/chart_bar.png
 *.log
 *.cache
 *.zip
