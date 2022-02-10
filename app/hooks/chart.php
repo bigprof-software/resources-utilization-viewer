@@ -119,6 +119,8 @@
 
 		<button type="button" class="btn btn-default pull-right toggle-today hidden-print" style="margin-top: 3vh;"><i class="glyphicon glyphicon-eye-open"></i> Today</button>
 	</h1></div>
+
+	<div class="chart-area">
 	<?php
 	
 	// Display month grid lines
@@ -237,5 +239,7 @@
 				<?php echo $project[$assDetails['ProjectId']]; ?>
 		</div><?php
 	}
+
+	?></div><?php
 
 	include_once("$appDir/footer.php");
