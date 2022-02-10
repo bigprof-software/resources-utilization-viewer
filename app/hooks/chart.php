@@ -6,11 +6,11 @@
 	// config
 	// TODO: these should be set in js or css rather than server-side to accomodate screen size
 	$chart = [
-		'dayWidth' => 2.5,
-		'resourceHeight' => 40,
-		'left' => 300,
-		'top' => 150,
-		'resourceSeparator' => 2,
+		'dayWidth' => .2,
+		'resourceHeight' => 5,
+		'left' => 19,
+		'top' => 22,
+		'resourceSeparator' => .3,
 		'colors' => [
 			'#FFC57F', '#B9FF7F', '#7FFFC5', '#7FB9FF', '#C47FFF', '#FF7FB9', '#D8984B', '#8BD84B', '#4BD898', '#4B8BD8', '#984BD8', '#D84B8B', '#D8B68C', '#AFD88C', '#8CD8B6', '#8CAFD8', '#B68CD8', '#D88CAF'
 		],
@@ -85,34 +85,61 @@
 	$nextYear = $year + 1;
 	?>
 	
-	<!-- refresh content every minute -->
-	<META HTTP-EQUIV="Refresh" CONTENT="60;url=chart.php?year=<?php echo $year; ?>">
-	
-	<div class="page-header"><h1 class="text-center">
+	<script>
+		$j(function() {
+			// reload every 60 seconds
+			setTimeout(() => { location.reload(); }, 60000);
+
+			// hide today button if not current year
+			let showToday = false;
+			try {
+				showToday = parseInt(location.search.match(/year=(\d+)/)[1]) == (new Date).getFullYear();
+			} catch(e) {
+				showToday = true; // if no year in url, this means we're displaying current year
+			}
+
+			$j('.toggle-today')
+				.toggleClass('hidden', !showToday)
+				.on('click', function() {
+					let btn = $j(this), activate = btn.hasClass('btn-default');
+
+					btn
+						.toggleClass('btn-info', activate)
+						.toggleClass('btn-default', !activate)
+
+					$j('.today-line').toggleClass('hidden', !activate);
+				})
+		})
+	</script>
+
+	<div class="page-header" style="position: absolute; left: 10vw; top: 3vh; width: 80vw;"><h1 class="text-center">
 		<a class="btn btn-default btn-lg hspacer-lg" href="chart.php?year=<?php echo $prevYear; ?>"><?php echo $prevYear; ?></a>
 		<?php echo $year; ?>
 		<a class="btn btn-default btn-lg hspacer-lg" href="chart.php?year=<?php echo $nextYear; ?>"><?php echo $nextYear; ?></a>
+
+		<button type="button" class="btn btn-default pull-right toggle-today hidden-print" style="margin-top: 3vh;"><i class="glyphicon glyphicon-eye-open"></i> Today</button>
 	</h1></div>
 	<?php
 	
 	// Display month grid lines
-	$prevLeft = $chart['left'];
+	$prevLeft = $chart['left'] ?? 0;
 	$thisMonth = date('n');
 	$thisYear = date('Y');
 	for($m = 1; $m <= 12; $m++) {
 		$daysPerMonth = date('t', strtotime("$year-$m-01"));
 		?>
 		<div
+			class="month-label"
 			style="
 				position: absolute;
-				left: <?php echo $prevLeft; ?>px;
-				height: <?php echo ((count($resource) + 1) * ($chart['resourceHeight'] + $chart['resourceSeparator'])); ?>px;
+				left: <?php echo $prevLeft; ?>vw;
+				height: <?php echo ((count($resource) + 1) * ($chart['resourceHeight'] + $chart['resourceSeparator'])); ?>vh;
 				border-left: dotted 1px Silver;
 				<?php if($m == 12) { ?>border-right: dotted 1px Silver;<?php } ?>
-				top: <?php echo ($chart['top'] + $chart['resourceHeight'] + $chart['resourceSeparator']); ?>px;
+				top: <?php echo ($chart['top'] + $chart['resourceHeight'] + $chart['resourceSeparator']); ?>vh;
 				text-align: center;
 				font-family: Arial; font-size: 10px; font-weight: bold;
-				width: <?php echo ($daysPerMonth * $chart['dayWidth']); ?>px;
+				width: <?php echo ($daysPerMonth * $chart['dayWidth']); ?>vw;
 			">
 			<?php echo date('M Y', strtotime("$year-$m-01")); ?>
 		</div>
@@ -122,13 +149,14 @@
 		if($year == $thisYear && $m == $thisMonth) {
 			?>
 			<div
+				class="today-line hidden"
 				title="Today, <?php echo date('j/n/Y'); ?>"
 				style="
 					border-left: solid 2px DarkRed;
 					position: absolute;
-					top: <?php echo ($chart['top'] + ($chart['resourceHeight'] + $chart['resourceSeparator']) * 1.5); ?>px;
-					left: <?php echo ($prevLeft + (date('j') - 1) * $chart['dayWidth']); ?>px;
-					height: <?php echo ((count($resource) + 0.5) * ($chart['resourceHeight'] + $chart['resourceSeparator'])); ?>px;
+					top: <?php echo ($chart['top'] + ($chart['resourceHeight'] + $chart['resourceSeparator']) * 1.5); ?>vh;
+					left: <?php echo ($prevLeft + (date('j') - 1) * $chart['dayWidth']); ?>vw;
+					height: <?php echo ((count($resource) + 0.5) * ($chart['resourceHeight'] + $chart['resourceSeparator'])); ?>vh;
 					z-index: 2;
 				"></div>
 			<?php
@@ -143,12 +171,13 @@
 		$i = $resourceIndex[$ResourceId] + 1;
 		$available = !array_key_exists($ResourceId, $unavailableResource);
 		?><div
+			class="resource"
 			style="
 				position: absolute;
-				top: <?php echo ($chart['resourceHeight'] * ($i + 1) + $chart['top'] + $i * $chart['resourceSeparator']); ?>px;
+				top: <?php echo ($chart['resourceHeight'] * ($i + 1) + $chart['top'] + $i * $chart['resourceSeparator']); ?>vh;
 				border-bottom: solid 1px Silver;
-				width: <?php echo (365 * $chart['dayWidth'] + $chart['left']); ?>px;
-				height: <?php echo intval($chart['resourceHeight']); ?>px;
+				width: <?php echo (365 * $chart['dayWidth'] + $chart['left']); ?>vw;
+				height: <?php echo intval($chart['resourceHeight']); ?>vh;
 				font-family: Arial;
 				font-size: 12px;
 			">
@@ -173,9 +202,9 @@
 		?><div
 			style="
 				position: absolute;
-				width: <?php echo intval(($chartEndTS - $chartStartTS + 86400) / 86400 * $chart['dayWidth']); ?>px;
-				left: <?php echo intval(($chartStartTS - strtotime("$year-01-01")) / 86400 * $chart['dayWidth'] + $chart['left']); ?>px;
-				height: <?php echo intval($chart['resourceHeight'] * $assDetails['Commitment']); ?>px;
+				width: <?php echo intval(($chartEndTS - $chartStartTS + 86400) / 86400 * $chart['dayWidth']); ?>vw;
+				left: <?php echo intval(($chartStartTS - strtotime("$year-01-01")) / 86400 * $chart['dayWidth'] + $chart['left']); ?>vw;
+				height: <?php echo intval($chart['resourceHeight'] * $assDetails['Commitment']); ?>vh;
 				background-color: <?php echo $projectColor[$assDetails['ProjectId']]; ?>;
 				top: <?php 
 					echo (
@@ -191,7 +220,7 @@
 						:
 							0
 						)
-					); ?>px;
+					); ?>vh;
 				cursor: pointer;
 				text-align: center;
 				font-size: 10px;
