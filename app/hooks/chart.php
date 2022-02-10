@@ -19,7 +19,7 @@
 	$t1 = microtime(true);
 	
 	// some initilization
-	$resourceProject = $project = $projectColor = $resource = $unavailableResource = $assignment = [];
+	$resourceProject = $project = $projectColor = $resource = $resourceIndex = $unavailableResource = $assignment = [];
 
 	// chart parameters
 	$year = intval($_GET['year']);
@@ -40,9 +40,13 @@
 	// get resources
 	$res = sql("SELECT `Id`, `Name`, `Available` FROM `resources`", $eo);
 	while($row = db_fetch_row($res)) {
+		$resourceIndex[] = $row[0];
 		$resource[$row[0]] = $row[1];
 		if(!$row[2]) $unavailableResource[$row[0]] = $row[1];
 	}
+
+	// invert resourceIndex so that we can retrieve the 1-based index of a resource given resource id
+	$resourceIndex = array_flip($resourceIndex);
 	
 	// get assignments for open projects for selected year
 	$assignment = [];
@@ -136,11 +140,12 @@
 	
 	// Display resource names
 	foreach($resource as $ResourceId => $ResourceName) {
+		$i = $resourceIndex[$ResourceId] + 1;
 		$available = !array_key_exists($ResourceId, $unavailableResource);
 		?><div
 			style="
 				position: absolute;
-				top: <?php echo ($chart['resourceHeight'] * ($ResourceId + 1) + $chart['top'] + $ResourceId * $chart['resourceSeparator']); ?>px;
+				top: <?php echo ($chart['resourceHeight'] * ($i + 1) + $chart['top'] + $i * $chart['resourceSeparator']); ?>px;
 				border-bottom: solid 1px Silver;
 				width: <?php echo (365 * $chart['dayWidth'] + $chart['left']); ?>px;
 				height: <?php echo intval($chart['resourceHeight']); ?>px;
@@ -162,6 +167,7 @@
 	$yearStartTS = strtotime(date("$year-01-01"));
 	$yearEndTS = strtotime(date("$year-12-31 23:59:59"));
 	foreach($assignment as $assDetails){
+		$i = $resourceIndex[$assDetails['ResourceId']] + 1;
 		$chartStartTS = max($assDetails['StartTS'], $yearStartTS);
 		$chartEndTS = min($assDetails['EndTS'], $yearEndTS);
 		?><div
@@ -174,8 +180,8 @@
 				top: <?php 
 					echo (
 						$chart['top'] + 
-						$chart['resourceHeight'] * ($assDetails['ResourceId'] + 1) + 
-						$assDetails['ResourceId'] * $chart['resourceSeparator'] + 
+						$chart['resourceHeight'] * ($i + 1) + 
+						$i * $chart['resourceSeparator'] + 
 						($assDetails['Commitment'] < 1 ?
 							($resourceProject[$assDetails['ResourceId']][$assDetails['ProjectId']] > 1 ?
 								(1 - $assDetails['Commitment']) * $chart['resourceHeight']
