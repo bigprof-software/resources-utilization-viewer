@@ -1,12 +1,11 @@
 <?php
-	$appgini_version = '5.97.1142';
-	$generated_ts = '14/6/2021 4:20:18 PM';
+	$appgini_version = '22.11.1257';
+	$generated_ts = '10/2/2022 11:22:18 PM';
 
-	$currDir = dirname(__FILE__);
-	require("{$currDir}/incCommon.php");
+	require(__DIR__ . '/incCommon.php');
 
 	$GLOBALS['page_title'] = $Translation['server status'];
-	include("{$currDir}/incHeader.php");
+	include(__DIR__ . '/incHeader.php');
 
 	// get phpinfo() and remove HTML wrapping
 	ob_start();
@@ -36,21 +35,21 @@
 	if(getUploadDir('')[0] == '/')
 		$uploads_path = getUploadDir('');
 	else
-		$uploads_path = dirname(__FILE__) . '/../' . getUploadDir('');
+		$uploads_path = __DIR__ . '/../' . getUploadDir('');
 
 	$uploads_path = rtrim($uploads_path, '\\/') . '/';
 
 	$uf = dir(rtrim($uploads_path));
 	while(false !== ($entry = $uf->read())) {
 		// entries to skip
-		if(in_array($entry, array(
+		if(in_array($entry, [
 			'.', 
 			'..', 
 			'blank.gif', 
 			'blank_dv.gif', 
 			'blank_tv.gif', 
 			'index.html'
-		))) continue;
+		])) continue;
 
 		if(@is_dir($uploads_path . $entry)) continue;
 
@@ -209,4 +208,4 @@
 </script>
 
 <?php
-	include("{$currDir}/incFooter.php");
+	include(__DIR__ . '/incFooter.php');

@@ -1,6 +1,6 @@
-<?php if(!defined('datalist_date_separator')) die('datalist.php not included!');
+<?php
 
-class DateCombo{
+class DateCombo {
 	// renders a date combo with a pre-selected date
 
 	var $DateFormat,          // any combination of y,m,d
@@ -14,11 +14,7 @@ class DateCombo{
 		$CSSSelectedClass,
 		$CSSCommentClass;
 
-	function __construct() {  // PHP 7 compatibility
-		$this->DateCombo();
-	}
-
-	function DateCombo() {
+	function __construct() {
 		// set default values
 		$this->DateFormat = "ymd";
 		$this->DefaultDate = '';

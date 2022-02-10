@@ -1,6 +1,6 @@
 <?php
-	$rdata = array_map('to_utf8', array_map('nl2br', array_map('html_attr_tags_ok', $rdata)));
-	$jdata = array_map('to_utf8', array_map('nl2br', array_map('html_attr_tags_ok', $jdata)));
+	$rdata = array_map('to_utf8', array_map('safe_html', array_map('html_attr_tags_ok', $rdata)));
+	$jdata = array_map('to_utf8', array_map('safe_html', array_map('html_attr_tags_ok', $jdata)));
 ?>
 <script>
 	$j(function() {
@@ -8,9 +8,9 @@
 
 		/* data for selected record, or defaults if none is selected */
 		var data = {
-			ProjectId: <?php echo json_encode(array('id' => $rdata['ProjectId'], 'value' => $rdata['ProjectId'], 'text' => $jdata['ProjectId'])); ?>,
+			ProjectId: <?php echo json_encode(['id' => $rdata['ProjectId'], 'value' => $rdata['ProjectId'], 'text' => $jdata['ProjectId']]); ?>,
 			ProjectDuration: <?php echo json_encode($jdata['ProjectDuration']); ?>,
-			ResourceId: <?php echo json_encode(array('id' => $rdata['ResourceId'], 'value' => $rdata['ResourceId'], 'text' => $jdata['ResourceId'])); ?>
+			ResourceId: <?php echo json_encode(['id' => $rdata['ResourceId'], 'value' => $rdata['ResourceId'], 'text' => $jdata['ResourceId']]); ?>
 		};
 
 		/* initialize or continue using AppGini.cache for the current table */

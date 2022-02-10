@@ -1,5 +1,7 @@
 var AppGini = AppGini || {};
 
+AppGini.version = 22.11;
+
 /* initials and fixes */
 jQuery(function() {
 	AppGini.count_ajaxes_blocking_saving = 0;
@@ -49,6 +51,9 @@ jQuery(function() {
 		else if(window_width >= 768) full_img_factor = 0.9; /* sm */
 
 		$j('.detail_view .img-responsive').css({'max-width' : parseInt($j('.detail_view').width() * full_img_factor) + 'px'});
+
+		/* change height of sizer div below navbar to accomodate navbar height */
+		$j('.top-margin-adjuster').height($j('.navbar-fixed-top:visible').height() ?? 10);
 
 		/* remove labels from truncated buttons, leaving only glyphicons */
 		$j('.btn.truncate:truncated').each(function() {
@@ -461,7 +466,9 @@ function loadScript(jsUrl, cssUrl, callback) {
  *    id: id attribute of modal window. auto-generated if not provided
  *    title: optional modal window title
  *    size: 'default', 'full'
- *    close: optional function to execute on closing the modal
+ *    noAnimation: optional, default is false. Set to true to disable animation effect while modal is launched
+ *    show: optional function to execute after showing the modal
+ *    close: optional function to execute after closing the modal
  *    footer: optional array of objects describing the buttons to display in the footer.
  *       Each button object can have the following members:
  *          label: string, label of button
@@ -565,7 +572,7 @@ function mass_delete(t, ids) {
 						if(!continue_delete) return;
 						jQuery.ajax(t + '_view.php', {
 							type: 'POST',
-							data: { delete_x: 1, SelectedID: ids[itrn] },
+							data: { delete_x: 1, SelectedID: ids[itrn], csrf_token: $j('#csrf_token').val() },
 							success: function(resp) {
 								if(resp != 'OK') {
 									jQuery('<li class="text-danger">' + resp + '</li>').appendTo('.well.details_list ol');
@@ -1276,6 +1283,10 @@ AppGini.TVScroll = function() {
 			var id = op.id, rsz = _resize;
 			rsz(id);
 			$j(window).resize(function() { rsz(id); });
+
+			if(typeof(op.show) == 'function') {
+				op.show();
+			}
 		})
 		//.agModal('show')
 		.on('hidden.bs.modal', function() {
@@ -1475,6 +1486,7 @@ AppGini.calculatedFields = {
 		$j.ajax({
 			url: 'ajax-update-calculated-fields.php',
 			data: { table: table, id: id },
+			type: 'POST',
 			success: function(resp) {
 				if(resp.data == undefined || resp.error == undefined) return;
 
