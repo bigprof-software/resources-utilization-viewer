@@ -113,16 +113,31 @@
 	</script>
 
 	<div class="page-header" style="position: absolute; left: 10vw; top: 3vh; width: 80vw;"><h1 class="text-center">
-		<a class="btn btn-default btn-lg hspacer-lg" href="chart.php?year=<?php echo $prevYear; ?>"><?php echo $prevYear; ?></a>
+		<a class="btn btn-default btn-lg hspacer-lg" href="chart-resources.php?year=<?php echo $prevYear; ?>"><?php echo $prevYear; ?></a>
 		<?php echo $year; ?>
-		<a class="btn btn-default btn-lg hspacer-lg" href="chart.php?year=<?php echo $nextYear; ?>"><?php echo $nextYear; ?></a>
+		<a class="btn btn-default btn-lg hspacer-lg" href="chart-resources.php?year=<?php echo $nextYear; ?>"><?php echo $nextYear; ?></a>
 
 		<button type="button" class="btn btn-default pull-right toggle-today hidden-print" style="margin-top: 3vh;"><i class="glyphicon glyphicon-eye-open"></i> Today</button>
 	</h1></div>
 
 	<div class="chart-area">
 	<?php
-	
+
+	// Display 'Resource' header
+	?>
+	<div
+		class="label-header"
+		style="
+			position: absolute;
+			height: <?php echo ((count($resource) + 1) * ($chart['resourceHeight'] + $chart['resourceSeparator'])); ?>vh;
+			top: <?php echo ($chart['top'] + $chart['resourceHeight'] + $chart['resourceSeparator']); ?>vh;
+			font-family: Arial; font-size: 12px; font-weight: bold;
+		">
+		Resource
+	</div>
+
+	<?php
+
 	// Display month grid lines
 	$prevLeft = $chart['left'] ?? 0;
 	$thisMonth = date('n');

@@ -10,9 +10,16 @@
 		);
 	*/
 
-		$navLinks[] = array(
-			'url' => 'hooks/chart.php', 
+		$navLinks[] = [
+			'url' => 'hooks/chart-resources.php', 
 			'title' => 'Resources Utilization Chart', 
 			'groups' => array('*'), // groups allowed to see this link, use '*' if you want to show the link to all groups
 			'icon' => 'images/chart_bar.png'
-		);
+		];
+
+		$navLinks[] = [
+			'url' => 'hooks/chart-projects.php', 
+			'title' => 'Projects Chart', 
+			'groups' => array('*'), // groups allowed to see this link, use '*' if you want to show the link to all groups
+			'icon' => 'images/chart_bar.png'
+		];

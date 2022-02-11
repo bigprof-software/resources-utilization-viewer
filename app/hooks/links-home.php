@@ -14,8 +14,8 @@
 		);
 	 */
 
-		$homeLinks[] = array(
-			'url' => 'hooks/chart.php', 
+		$homeLinks[] = [
+			'url' => 'hooks/chart-resources.php', 
 			'title' => 'Resources Utilization Chart', 
 			'description' => 'Visualize the utilization of resources accross projects.',
 			'groups' => array('*'), // groups allowed to see this link, use '*' if you want to show the link to all groups
@@ -23,4 +23,15 @@
 			'panel_classes' => 'panel-info', // optional CSS classes to apply to panel. See: http://getbootstrap.com/components/#panels
 			'link_classes' => 'btn-info', // optional CSS classes to apply to link. See: http://getbootstrap.com/css/#buttons
 			'icon' => 'images/chart_bar.png' // optional icon to use with the link
-		);
+		];
+
+		$homeLinks[] = [
+			'url' => 'hooks/chart-projects.php', 
+			'title' => 'Projects Chart', 
+			'description' => 'Chart of project schedules.',
+			'groups' => array('*'), // groups allowed to see this link, use '*' if you want to show the link to all groups
+			'grid_column_classes' => 'col-xs-12 col-lg-6', // optional CSS classes to apply to link block. See: http://getbootstrap.com/css/#grid
+			'panel_classes' => 'panel-info', // optional CSS classes to apply to panel. See: http://getbootstrap.com/components/#panels
+			'link_classes' => 'btn-info', // optional CSS classes to apply to link. See: http://getbootstrap.com/css/#buttons
+			'icon' => 'images/chart_bar.png' // optional icon to use with the link
+		];
