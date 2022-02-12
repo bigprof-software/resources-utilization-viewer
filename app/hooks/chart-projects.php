@@ -75,9 +75,9 @@
 	</script>
 
 	<div class="page-header" style="position: absolute; left: 10vw; top: 3vh; width: 80vw;"><h1 class="text-center">
-		<a class="btn btn-default btn-lg hspacer-lg" href="chart-projects.php?year=<?php echo $prevYear; ?>"><?php echo $prevYear; ?></a>
+		<a class="btn btn-default btn-lg hspacer-lg hidden-print" href="chart-projects.php?year=<?php echo $prevYear; ?>"><?php echo $prevYear; ?></a>
 		<?php echo $year; ?>
-		<a class="btn btn-default btn-lg hspacer-lg" href="chart-projects.php?year=<?php echo $nextYear; ?>"><?php echo $nextYear; ?></a>
+		<a class="btn btn-default btn-lg hspacer-lg hidden-print" href="chart-projects.php?year=<?php echo $nextYear; ?>"><?php echo $nextYear; ?></a>
 
 		<button type="button" class="btn btn-default pull-right toggle-today hidden-print" style="margin-top: 3vh;"><i class="glyphicon glyphicon-eye-open"></i> Today</button>
 	</h1></div>
@@ -180,7 +180,8 @@
 				width: <?php echo intval(($chartEndTS - $chartStartTS + 86400) / 86400 * $chart['dayWidth']); ?>vw;
 				left: <?php echo intval(($chartStartTS - strtotime("$year-01-01")) / 86400 * $chart['dayWidth'] + $chart['left']); ?>vw;
 				height: <?php echo intval($chart['projectHeight']); ?>vh;
-				background-color: <?php echo $projectColor[$id]; ?>;
+				background-color: <?php echo $projectColor[$id]; ?> !important;
+				print-color-adjust: exact;
 				top: <?php 
 					echo (
 						$chart['top'] + 
@@ -194,9 +195,8 @@
 				color: #004 !important;
 				font-weight: bold;
 				opacity: 0.5;
-				filter:alpha(opacity=50);
-				white-space:nowrap;
-				overflow:hidden;
+				white-space: nowrap;
+				overflow: hidden;
 			"
 			title="<?php echo htmlspecialchars($prj['Name']); ?> from <?php echo date('j/n/Y', strtotime($prj['StartDate'])); ?> to <?php echo date('j/n/Y', strtotime($prj['EndDate'])); ?>"
 			onclick="window.location='../projects_view.php?SelectedID=<?php echo $id; ?>';">
