@@ -3,8 +3,11 @@
 	@define('SESSION_NAME', 'Resources_utilization');
 	@define('APP_TITLE', 'Resources Utilization');
 	@define('APP_DIR', __DIR__);
+	@define('APP_VERSION', '22.12');
 	@define('maxSortBy', 4);
 	@define('empty_lookup_value', '{empty_value}');
+	@define('MULTIPLE_SUPER_ADMINS', false);
+
 	@define('DATABASE', 'mysqli');
 	@define('mysql_charset', 'utf8');
 

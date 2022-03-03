@@ -201,8 +201,10 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-cog"></i> <?php echo $Translation['utilities']; ?> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="pageSettings.php"><i class="glyphicon menu-item-icon text-info glyphicon-cog"></i> <?php echo $Translation['admin settings']; ?></a></li>
-							<li class="divider"></li>
+							<?php if(Authentication::getSuperAdmin()) { ?>
+								<li><a href="pageSettings.php"><i class="glyphicon menu-item-icon text-info glyphicon-cog"></i> <?php echo $Translation['admin settings']; ?></a></li>
+								<li class="divider"></li>
+							<?php } ?>
 							<li><a href="pageMail.php?sendToAll=1"><i class="glyphicon menu-item-icon text-info glyphicon-envelope"></i> <?php echo $Translation['mail all users']; ?></a></li>
 							<li><a href="pageServerStatus.php"><i class="glyphicon menu-item-icon text-info glyphicon-hdd"></i> <?php echo $Translation['server status']; ?></a></li>
 							<li><a href="app-documentation.php"><i class="glyphicon menu-item-icon text-info glyphicon-book"></i> <?php echo $Translation['app documentation']; ?></a></li>

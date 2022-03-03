@@ -138,7 +138,17 @@
 		 */
 		public static function getAdmin() {
 			$mi = self::getUser();
-			if(!$mi || !$mi['admin']) return false;
+			if(!$mi) return false;
+			if($mi['group'] != 'Admins') return false;
+			if(!$mi['admin'] && !MULTIPLE_SUPER_ADMINS) return false;
+
+			return $mi['username'];
+		}
+
+		public static function getSuperAdmin() {
+			$mi = self::getUser();
+			if(!$mi) return false;
+			if(!$mi['admin']) return false;
 
 			return $mi['username'];
 		}

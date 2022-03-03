@@ -116,7 +116,7 @@
 								<?php if($config['show-page-progress']) { ?>
 									<span style="margin: 10px;">
 										<?php $firstRecord = ($parameters['Page'] - 1) * $config['records-per-page'] + 1; ?>
-										<?php echo str_replace(['<FirstRecord>', '<LastRecord>', '<RecordCount>'], [$firstRecord, $firstRecord + count($records) - 1, $totalMatches], $Translation['records x to y of z']); ?>
+										<?php echo str_replace(['<FirstRecord>', '<LastRecord>', '<RecordCount>'], ['<span class="first-record locale-int">' . $firstRecord . '</span>', '<span class="last-record locale-int">' . ($firstRecord + count($records) - 1) . '</span>', '<span class="record-count locale-int">' . $totalMatches . '</span>'], $Translation['records x to y of z']); ?>
 									</span>
 								<?php } ?>
 							<?php } else { ?>

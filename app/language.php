@@ -826,4 +826,11 @@ $Translation = [
 	// Added in 22.11
 	'continue browsing as guest' => 'Continue browsing as a guest',
 	'translation tool' => 'Translation tool',
+
+	// Added in 22.12
+	'query logs older than 2 month auto cleared' => 'Query logs older than 2 months are automatically cleared. You can manually clear logs through the clear buttons below.',
+	'clear slow queries' => 'Clear slow queries',
+	'clear error queries' => 'Clear error queries',
+	'confirm clear logs' => 'This will clear specified query logs. Please confirm!',
+	'query logs cleared' => '<TYPE> query logs cleared.',
 ];
